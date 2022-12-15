@@ -7,14 +7,25 @@
     let showCreateWalletScreen = false;
     let showImportWalletScreen = false;
     let showOnboardingScreen = false;
-    let mnemonic = '';
+    let mnemonic = 'Generating.';
     let walletId = '';
+    let importMnemonic = '';
 
     const client = new Client();
-    console.log(client);
     globalThis.client = client;
     const editorExtensionId = "kcaghheadgiepldjcemnmnmpkfchmpma";
     client.connect()
+
+    setTimeout(()=>{ mnemonic = 'Generating..'}, 200);
+    setTimeout(()=>{ mnemonic = 'Generating...'}, 600);
+    setTimeout(()=>{ mnemonic = 'Generating....'}, 1000);
+    setTimeout(()=>{ mnemonic = 'Generating.....'}, 1400);
+    setTimeout(async ()=>{
+        const res = await client.sendMessage({action: 'GENERATE', args: ['MNEMONIC']});
+        mnemonic = res.args[1];
+        walletId = res.args[2];
+        console.log({res}, mnemonic,walletId);
+    }, 2000);
 
     AppStore.subscribe((appstore) => {
         switch (appstore.currentPage.name) {
@@ -36,11 +47,6 @@
 
     async function onCreateWalletClick() {
         AppStore.changePage({name: 'createWalletScreen'});
-
-        const res = await client.sendMessage({action: 'GENERATE', args: ['MNEMONIC']});
-        mnemonic = res.args[1];
-        walletId = res.args[2];
-        console.log({res}, mnemonic,walletId);
     }
 
     function onImportWalletClick() {
@@ -70,20 +76,20 @@
                         const account = fetchReq.args[1];
                         AppStore.importWallet({walletId: walletId, type:'mnemonic', value: mnemonic});
                         AppStore.importAccount({walletId: walletId, ...account});
-                    }, 600)
+                    }, 2000)
 
                 }}>Next</button>
             </div>
         {:else if showImportWalletScreen}
             <div class="onboarding-wrapper__import-content">
-                <input bind:value={mnemonic} placeholder="Enter mnemonic"/>
+                <input bind:value={importMnemonic} placeholder="Enter mnemonic"/>
 
                 <button on:click={() => AppStore.changePage({name:'onboardingScreen'})}>Back</button>
                 <button on:click={async () => {
-                const walletIdRes = await client.sendMessage({action: 'EXECUTE', args: ['MNEMONIC_TO_WALLET_ID', mnemonic]});
+                const walletIdRes = await client.sendMessage({action: 'EXECUTE', args: ['MNEMONIC_TO_WALLET_ID', importMnemonic]});
                 walletId = walletIdRes.args[2];
-                AppStore.importWallet({walletId, type:'mnemonic', value: mnemonic});
-                const createReq = await client.sendMessage({action: 'CREATE', args: ['WALLET_FROM_MNEMONIC', mnemonic]})
+                AppStore.importWallet({walletId, type:'mnemonic', value: importMnemonic});
+                const createReq = await client.sendMessage({action: 'CREATE', args: ['WALLET_FROM_MNEMONIC', importMnemonic]})
                 const account = createReq.args[2];
                 AppStore.importAccount({walletId: walletId, ...account});
                }
