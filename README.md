@@ -1,6 +1,15 @@
 # extension
 The DashPay Connect extension enables browsing Dash blockchain enabled websites.
 
+#### Installation
+
+- Git clone the repository.
+- Open `chrome://extensions` in Chrome, and click `Load unpacked`
+- Load the `/dist` folder of the repository. 
+
+
+Try the demo : https://dashpayconnect.github.io/docs/boilerplate/connect-demo/index.html
+
 ## Development
 
 This project uses NodeJS and requires a `yarn link` with the Platform workspace to be performed first.   
@@ -24,9 +33,5 @@ This setup is temporary, hopefully we will have it modified in Platform directly
 > Perform replace of `Function("return this")();` to `(function() { return this || window || global || self; }).call(null);`
 > and `window.crypto` to `self.crypto`
 
-
-#### 
-
 Add a unpacked extension using the `npm run build:full` and loading the `/dist` folder to use the application.   
 Ensure ExtensionID match (should stay the same) for js-library integration.   
-Try the demo : https://dashpayconnect.github.io/docs/boilerplate/connect-demo/index.html
