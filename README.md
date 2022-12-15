@@ -1,6 +1,8 @@
 # extension
 The DashPay Connect extension enables browsing Dash blockchain enabled websites.
 
+![image](https://user-images.githubusercontent.com/5849920/207965123-14fcd6e5-a9ba-4ce7-8ad4-b5082c508751.png)
+
 #### Installation
 
 - Git clone the repository.
