@@ -1,0 +1,69 @@
+{
+  "manifest_version":3,
+  "name":"DashPay Connect",
+  "description":"Chrome extension for Dash",
+  "version":"1.0.0",
+  "background": {
+    "service_worker": "js/app-init.js"
+  },
+  "content_scripts": [
+    {
+      "run_at" : "document_start",
+      "js": ["before.js"],
+      "matches": [
+        "https://*/*",
+        "http://*/*"
+      ]
+    },
+    {
+      "run_at" : "document_idle",
+      "js": ["after.js"],
+      "matches": [
+        "https://*/*",
+        "http://*/*"
+      ]
+    },
+    {
+    "matches": ["file://*/*", "http://*/*", "https://*/*"],
+    "js": [
+      "foreground.js",
+      "disable-console.js",
+      "js/inpage.js"]
+  }],
+  "action": {
+    "default_title": "DashGov",
+    "default_popup": "popup/popup.html",
+    "default_icon": "icon.png"
+  },
+  "author":"Alex Werner <alex@werner.fr>",
+  "icons":{
+    "128":"icon.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "default-src 'self'; style-src 'unsafe-inline'; media-src 'none'; child-src 'none'; connect-src 'self'; script-src 'self'; img-src 'self'; object-src 'none'; font-src 'self' data:;"
+  },
+  "web_accessible_resources":[
+    {
+      "resources": ["icon.png", "js/inpage.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "externally_connectable": {
+    "matches": [
+      "https://*/*",
+      "http://*/*",
+      "localhost://*/*"
+    ]
+  },
+  "permissions":[
+    "activeTab",
+    "alarms",
+    "background",
+    "clipboardWrite",
+    "notifications",
+    "scripting",
+    "storage",
+    "unlimitedStorage",
+    "webRequest"
+  ]
+}

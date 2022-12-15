@@ -1,0 +1,33 @@
+@import "../../common.scss";
+.ellipsis-menu-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+}
+
+.ellipsis-menu {
+  position: absolute;
+  left: 215px;
+  top: 60px;
+  width: 200px;
+  overflow: auto;
+  //transform: translate(-50%,-50%);
+  border-radius: 0.2em;
+  background: white;
+
+  button {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    color: $darkblue;
+  }
+
+  button:hover{
+    background-color: #b2d7f3;
+  }
+
+}
+

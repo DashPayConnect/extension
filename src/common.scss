@@ -1,0 +1,43 @@
+@import 'normalize.css';
+
+$dashblue: #008de4;
+$darkblue: #292d3e;
+
+$lightgrey: #f7f7f7;
+$white: #ffffff;
+
+$fullwidth: 420px;
+$fullheight: 600px;
+
+body {
+  background-color: $dashblue;
+  color: #ffffff;
+  width: 420px;
+  max-width: 420px;
+  max-height: 600px;
+  height: 600px;
+}
+a {
+  color: #b5cfde;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #9cc5de;
+
+}
+
+button {
+  color: $darkblue
+}
+
+.input-group {
+  display: flex;
+
+  margin: 1rem 0;
+
+  flex-direction: row;
+  gap: 1rem;
+
+  align-items: center;
+}

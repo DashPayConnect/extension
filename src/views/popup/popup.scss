@@ -1,0 +1,27 @@
+@import '../../common.scss';
+$color: red;
+h1 {
+  color: $color;
+}
+
+div {
+  background: green;
+
+  > p {
+    color: #fff;
+  }
+}
+
+.container {
+  min-height: 200px;
+  min-width: 300px;
+
+  padding: 2rem;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+}

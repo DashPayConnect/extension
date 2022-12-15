@@ -1,0 +1,92 @@
+@import '../../common.scss';
+
+header {
+  background-color: $dashblue;
+  width: $fullwidth;
+  height: 120px;
+  padding: 15px 10px 0px 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.ellipsis-menu-button {
+  cursor: pointer;
+}
+.connected_status_indicator {
+  width: 60px;
+  display: flex;
+  background: none;
+  font-size: inherit;
+  padding: 8px;
+  border-radius: 100px;
+  border-style: none;
+  cursor: pointer;
+
+  .color-indicator {
+    height: 8px;
+    width: 8px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    display: flex;
+    //border-color: green;
+
+    &__inner_circle-connected {
+      color: greenyellow;
+    }
+    &__inner_circle-disconnected {
+      color: darkred;
+    }
+  }
+
+  &__text {
+    font-size: 0.625rem;
+    font-family: "Euclid Circular B", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 140%;
+    font-style: normal;
+    font-weight: normal;
+    color: var(--color-text-alternative);
+    margin-left: 6px;
+    white-space: nowrap;
+  }
+}
+
+.balance_wrapper {
+  display: flex;
+  width: $fullwidth - 100px;
+  flex-direction: column;
+  align-items: center;
+
+  &__address-dash {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    color: white;
+    margin-bottom: 0;
+  }
+  &__amount-dash {
+    color: white;
+    font-size: 20px;
+    line-height: 34px;
+    padding-left: 28px;
+    background-image: url('../../../static/img/logo-d-white.svg');
+    background-repeat: no-repeat;
+    background-position: left center;
+    margin: 0;
+  }
+  &__amount-fiat {
+    margin-top: 0;
+    font-size: 12px;
+    line-height: 20px;
+    font-weight: 400;
+    color: white;
+  }
+}
+.options_wrapper {
+  display: flex;
+  width: 50px;
+  height: 50px;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+}

@@ -1,0 +1,66 @@
+{
+  "name":"DashPay Connect",
+  "description":"Chrome extension for Dash",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "serviceWorker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "dialog.html",
+        "register.html"
+      ],
+      "matches": [ "http://*/*" ]
+    }
+  ],
+  "content_security_policy": {
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'; connect-src 'self'"
+  },
+  "externally_connectable": {
+    "matches": [
+      "https://*/*",
+      "http://*/*"
+    ]
+  },
+  "permissions":[
+    "activeTab",
+    "alarms",
+    "background",
+    "clipboardWrite",
+    "debugger",
+    "nativeMessaging",
+    "notifications",
+    "scripting",
+    "storage",
+    "unlimitedStorage",
+    "webRequest"
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "action": {
+    "default_title": "DashPay Connect",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "/icons/icon.png",
+      "32": "/icons/icon.png",
+      "48": "/icons/icon.png",
+      "128": "/icons/icon.png"
+    }
+  },
+  "icons": {
+    "16": "/icons/icon.png",
+    "32": "/icons/icon.png",
+    "48": "/icons/icon.png",
+    "128": "/icons/icon.png"
+  }
+}
