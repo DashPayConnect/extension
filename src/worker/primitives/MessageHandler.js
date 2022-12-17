@@ -45,23 +45,18 @@ class MessageHandler {
             const type = stdMessage.args[0];
             console.info(`> REQ - [${stdMessage.action}|${type} - ${JSON.stringify(stdMessage)}`);
 
-
             switch (stdMessage.action) {
                 case StdMessage.ACTIONS.CREATE:
                     response = await workDispatcher.create(stdMessage);
                     break;
                 case StdMessage.ACTIONS.FETCH:
-                    console.log('beforeFetch');
                     response = await workDispatcher.fetch(stdMessage);
-                    console.log('afterFetch',response);
                     break;
                 case StdMessage.ACTIONS.EXECUTE:
                     response = await workDispatcher.execute(stdMessage);
                     break;
                 case StdMessage.ACTIONS.GENERATE:
-                    console.log('Message.Generate')
                     response = await workDispatcher.generate(stdMessage);
-                    console.log('Message.Generated')
                     break;
                 case StdMessage.ACTIONS.DISCONNECT:
                     console.log('External request to disconnect');

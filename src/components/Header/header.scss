@@ -3,13 +3,41 @@
 header {
   background-color: $dashblue;
   width: $fullwidth;
-  height: 120px;
+  height: 140px;
   padding: 15px 10px 0px 0px;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
 }
 
+.header_overlay_container {
+  background-color: #f7f7f7;
+  position: absolute;
+  left: 100px;
+  width: 230px;
+  top: 105px;
+  text-align: center;
+  height: 50px;
+  border-radius: 12px 12px 0 0;
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  button {
+    color: $darkblue;
+    display: block;
+    width: 100px;
+    height: 40px;
+    border: 1px solid #c1d8ec;
+    border-radius: 6px;
+    background-color: #d8e9f8;
+  }
+
+  button:hover{
+    background-color: #b2d7f3;
+  }
+}
 .ellipsis-menu-button {
   cursor: pointer;
 }

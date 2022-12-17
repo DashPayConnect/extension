@@ -3,7 +3,10 @@
     import {AccountStore } from '../../stores/stores';
 
     import EllipsisMenu from '../EllipsisMenu/EllipsisMenu.svelte';
+    import PaymentModal from '../PaymentModal/PaymentModal.svelte';
     let showEllipsisMenu = false;
+    let showReceiveModal = false;
+    let showSendModal = false;
 
     function onEllipsisClick(){
         showEllipsisMenu = true;
@@ -15,6 +18,12 @@
     }
     function onAddressClick(){
         window.navigator.clipboard.writeText(address);
+    }
+    function openReceiveModal(){
+        showReceiveModal = true
+    }
+    function openSendModal(){
+        showSendModal = true
     }
 </script>
 <header>
@@ -32,7 +41,17 @@
     <section class="options_wrapper">
         <img alt="options ellipsis logo"  class="ellipsis-menu-button" src="img/ellipsis-v.svg" width="6px" on:click={onEllipsisClick}/>
     </section>
+    <div class="header_overlay_container">
+        <button style="margin-right: 5px" on:click={openReceiveModal}>Receive</button>
+        <button style="margin-left: 5px" on:click={openSendModal}>Send</button>
+    </div>
 </header>
 {#if showEllipsisMenu}
     <EllipsisMenu on:closeEllipsisMenu="{() => showEllipsisMenu = false}" />
+{/if}
+{#if showReceiveModal}
+    <PaymentModal on:closePaymentModal="{() => showReceiveModal = false}" screen="receive"/>
+{/if}
+{#if showSendModal}
+    <PaymentModal on:closePaymentModal="{() => showSendModal = false}" screen="send" />
 {/if}

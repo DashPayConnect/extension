@@ -13,9 +13,7 @@ const defaultAppStore = {
     wallets: {
 
     },
-    accounts: {
-
-    },
+    accounts: [],
     settings: {
         fiat: ''
     }
@@ -127,7 +125,7 @@ const createAppStore = () => {
         },
         importAccount: (accountInfoObj) => {
             AppStore.update(appStore => {
-                appStore.accounts[accountInfoObj.address] = accountInfoObj;
+                appStore.accounts.push(accountInfoObj);
                 return appStore;
             })
         },

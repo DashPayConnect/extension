@@ -1,5 +1,10 @@
 <script>
-    import {Client} from "../../../../js-library/src/index";
+    import { onMount } from 'svelte';
+
+    onMount(async () => {
+        console.log('ONBOARD MOUNT')
+    });
+        import {Client} from "../../../../js-library/src/index";
 
     require('./onboarding.scss')
     import {AppStore, currentPage} from '../../stores/stores';
@@ -11,10 +16,7 @@
     let walletId = '';
     let importMnemonic = '';
 
-    const client = new Client();
-    globalThis.client = client;
-    const editorExtensionId = "camoceckaeifkkpepgjoccjfjkcjhojc";
-    client.connect()
+    const client = globalThis.client;
 
     setTimeout(()=>{ mnemonic = 'Generating..'}, 200);
     setTimeout(()=>{ mnemonic = 'Generating...'}, 600);
@@ -88,6 +90,7 @@
                     setTimeout(async ()=>{
                         const fetchReq = await client.sendMessage({action: 'FETCH', args: ['ACCOUNT']})
                         const account = fetchReq.args[1];
+                        console.log(account, await client.getCurrentAccount(), await client.fetchCurrentAccount());
                         AppStore.importWallet({walletId: walletId, type:'mnemonic', value: mnemonic});
                         AppStore.importAccount({walletId: walletId, ...account});
                     }, 2000)

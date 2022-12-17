@@ -10,7 +10,6 @@ class WorkDispatcher {
         const mnemonic = request.args[1];
         switch (createType) {
             case 'WALLET_FROM_MNEMONIC':
-                this.storage.set({mnemonic});
                 const instance = await this.dashManager.createInstance({mnemonic});
                 request.args.push(instance.currentAccount.getUnusedAddress());
                 return;

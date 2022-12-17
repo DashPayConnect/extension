@@ -8,11 +8,29 @@ const checkForLastError = require('../../utils/checkForLastError');
  *
  * It uses Session storage for data that needs to be cleared off at the end of the session.
  */
+const defaultState = {};
 class SecureStorage {
     constructor() {
         this.object = {};
     }
-    get(isSession = false){
+
+    async init(){
+        console.log(`[SecureStorage] Initializing...`)
+        const state = await this.get() || {...defaultState};
+
+        if(!state?.storage?.initializedDatetime > 0){
+            state.storage = {
+                initializedDatetime: new Date().toISOString()
+            }
+        }
+        state.storage.lastInitialization = new Date().toISOString();
+        this.object = state;
+        console.log(`[SecureStorage] Initialized state to ${JSON.stringify(state)}`)
+        await this.set(this.object);
+    }
+
+
+    async get(isSession = false){
         const { local, session } = chrome.storage;
         const store = (isSession) ? session : local;
 
@@ -27,7 +45,7 @@ class SecureStorage {
             });
         });
     }
-    set(object, isSession = false){
+    async set(object, isSession = false){
         const { local,session } = chrome.storage;
         const store = (isSession) ? session : local;
         this.object = object;
@@ -40,6 +58,17 @@ class SecureStorage {
                     resolve();
                 }
             });
+        });
+    }
+    async clear(isSession = false){
+        const { local,session } = chrome.storage;
+        const store = (isSession) ? session : local;
+        let object = this.object;
+        return new Promise(async (resolve, reject) => {
+            store.clear();
+            object = await store.set({...defaultState});
+            console.log("Cleared...", await this.get(), this.object)
+            resolve(true)
         });
     }
 };

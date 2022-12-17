@@ -1,8 +1,17 @@
 const Dash = require('../../../../platform/packages/js-dash-sdk/dist/dash.min');
 // Used to work with multiple Dash's instance.
 class DashManager {
-    constructor() {
+    constructor(storage) {
         this.instances = {};
+
+        this.storage = storage;
+    }
+    async init(){
+        console.log(`[DashManager] Initializing...`)
+        const {currentAccount, currentWallet} = this.storage.object;
+
+        const { mnemonic } = this.storage.object.wallets[currentWallet];
+        await this.createInstance({mnemonic, index: currentAccount});
     }
     getInstance(walletId){
         return this.instances[walletId];
@@ -15,12 +24,13 @@ class DashManager {
             return false;
         }
 
+        const storage = this.storage;
         return instance.client
             .getWalletAccount({index:accountIndex})
             .then((account) => instance.currentAccount = account)
             .then((res)=>{
-                console.log(res)
-                console.log('Done');
+                console.log(`[DashManager] Switched to ${walletId}:${accountIndex}.`)
+                storage.set({currentWallet: walletId, currentAccount: accountIndex})
                 return instance;
             });
     }
@@ -37,7 +47,11 @@ class DashManager {
         }
         this.instances[walletId] = instance;
 
-        const accountIndex = 0;
+        const wallets = {...this.storage.get()?.wallets};
+        wallets[walletId] = walletOpts;
+        await this.storage.set({wallets});
+
+        const accountIndex = walletOpts.index || 0;
         return this.switchAccountInstance(walletId, accountIndex);
     }
 

@@ -16,22 +16,15 @@
     $: firstRun = undefined;
     $: wallets = undefined;
 
+    let isInitialized = false
     import {AppStore, logs, WalletStore} from './stores/stores'
+    import {Client} from "../../js-library";
 
-    // AppStore.subscribe(appStore => {
-    //     console.log('Wallets',appStore.wallets)
-    // })
+    const client = new Client();
+    globalThis.client = client;
+    const editorExtensionId = "camoceckaeifkkpepgjoccjfjkcjhojc";
+    client.connect().then(()=> isInitialized = true);
 
-    // logs.subscribe(logVal => {
-    //     firstRun = logVal.firstRun;
-    //     console.log('First ran at: ', logVal.firstRun);
-    // });
-    // WalletStore.subscribe(walletsValue => {
-    //     console.log({walletsValue});
-    //     wallets = walletsValue;
-    // })
-
-    // console.log("First Run",logs.get, AppStore)
     setContext("app_functions", {
         // switchPage: (name, data) => switchPage(name, data),
         // openModal: (modal, data) => openModal(modal, data),
@@ -41,39 +34,20 @@
         // closeModal: () => (showModal = false),
         firstRun: () => (firstRun ? true : false),
         // appHome: () => switchPage("CoinsMain"),
-        checkFirstRun: () => checkFirstRun(),
-        // themeToggle: themeToggle,
         // setAccountAdded: () => (accountAdded = true),
     });
-    console.log('====')
-    console.log($wallets)
-    console.log(Object.keys($WalletStore).length)
-
-    const checkFirstRun = () => {
-        console.log('Check first run');
-        chrome.runtime.sendMessage({ type: "isFirstRun" }, (isFirstRun) => {
-            firstRun = isFirstRun;
-            // if (!firstRun && $currentPage.name === "FirstRunMain") {
-                // SettingsStore.changePage({ name: "CoinsMain" });
-            // }
-            // if (!firstRun && $currentPage.name === "FirstRunRestoreMain") {
-                // SettingsStore.changePage({ name: "CoinsMain" });
-            // }
-            // firstRun ? SettingsStore.changePage({ name: "FirstRunMain" }) : null;
-            // if (firstRun) accountAdded = true;
-        });
-    };
-    console.log({$wallets})
 </script>
 
 <div>
 
-    <!--{#if !wallets.length > 0}-->
-    {#if !Object.keys($WalletStore).length}
-        <svelte:component this="{OnBoarding}" />
-    {:else}
-        <svelte:component this={Header} />
-        <svelte:component this="{Dashboard}" />
-        <svelte:component this={Footer} />
+    {#if isInitialized}
+        {#if !Object.keys($WalletStore).length}
+            <svelte:component this="{OnBoarding}" />
+        {:else}
+            <svelte:component this={Header} />
+            <svelte:component this="{Dashboard}" />
+            <svelte:component this={Footer} />
+        {/if}
     {/if}
+
 </div>
