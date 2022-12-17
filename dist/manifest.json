@@ -22,7 +22,8 @@
     }
   ],
   "content_security_policy": {
-    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'; connect-src 'self'"
+    "content_security_policy": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   },
   "externally_connectable": {
     "matches": [
@@ -32,10 +33,7 @@
   },
   "permissions":[
     "activeTab",
-    "alarms",
     "background",
-    "clipboardWrite",
-    "debugger",
     "nativeMessaging",
     "notifications",
     "scripting",
@@ -62,5 +60,6 @@
     "32": "/icons/icon.png",
     "48": "/icons/icon.png",
     "128": "/icons/icon.png"
-  }
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgQ+NtGs+MMorzlI/pp7cGGPjoTBMj8f/XUUI4CyeQ6Wj7LfoKFvIePKCpIsvoQR9PwB4GgkrFZQ4IHMJc608Itpg/wHS28wEFVZWw4GqaM1bW8/44AT6cbVmJnQrVUx16YyqoX4rM/cAxDe26sRkgAtjXT4mUoeZhoW2ErOOoZGue+vZKyr6t/MNWrgCwCFaes7q5VoN6kwky4ED3i0OFKakBRn5fUyo+ldCGQM2H/rWCRNnNE7zToVJ2FhKVRacljzhL0S8FeUgUrOxxyW2FYRWMnqsI+jChu40dqHGsHAnajC1bhbubhpglnTK4JG6Xqa473wkB1AVVjEYn7xQXwIDAQAB"
 }

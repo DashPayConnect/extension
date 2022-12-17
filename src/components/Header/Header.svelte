@@ -11,8 +11,10 @@
     let account = $AccountStore[Object.keys($AccountStore)[0]];
     let address;
     if(account){
-        console.log(account);
-        address = account.address.address.slice(0, 4) + '...' + account.address.address.slice(-6)
+        address = account.address.address;
+    }
+    function onAddressClick(){
+        window.navigator.clipboard.writeText(address);
     }
 </script>
 <header>
@@ -23,7 +25,7 @@
         <img alt="Dash Logo" src="img/logo.png" width="60" style="margin-left:5px">
     </button>
     <section class="balance_wrapper">
-        <p class="balance_wrapper__address-dash">{address} </p>
+        <p class="balance_wrapper__address-dash text-hover" data-hover="Click to copy" on:click={onAddressClick}>{address.slice(0, 4) + '...' + address.slice(-6)} </p>
         <p class="balance_wrapper__amount-dash">0</p>
         <p class="balance_wrapper__amount-fiat">0,00$</p>
     </section>

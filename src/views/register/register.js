@@ -1,7 +1,7 @@
 require('./register.scss')
 
 
-const editorExtensionId = "kcaghheadgiepldjcemnmnmpkfchmpma";
+const editorExtensionId = "camoceckaeifkkpepgjoccjfjkcjhojc";
 const {Client} = require('../../../../js-library/src/index');
 let client = new Client();
 globalThis.client = client;

@@ -13,18 +13,32 @@
 
     const client = new Client();
     globalThis.client = client;
-    const editorExtensionId = "kcaghheadgiepldjcemnmnmpkfchmpma";
+    const editorExtensionId = "camoceckaeifkkpepgjoccjfjkcjhojc";
     client.connect()
 
     setTimeout(()=>{ mnemonic = 'Generating..'}, 200);
     setTimeout(()=>{ mnemonic = 'Generating...'}, 600);
     setTimeout(()=>{ mnemonic = 'Generating....'}, 1000);
     setTimeout(()=>{ mnemonic = 'Generating.....'}, 1400);
-    setTimeout(async ()=>{
+
+    async function fetchGenerateMnemonic(){
+        console.log('GENEATE');
         const res = await client.sendMessage({action: 'GENERATE', args: ['MNEMONIC']});
-        mnemonic = res.args[1];
-        walletId = res.args[2];
-        console.log({res}, mnemonic,walletId);
+        console.log('GENERATED', res);
+        if(res && res.args){
+            mnemonic = res.args[1];
+            walletId = res.args[2];
+        }
+        return res;
+    }
+
+    setTimeout(async ()=>{
+         let res = await fetchGenerateMnemonic();
+        // if(!res || !res.args){
+        //     setTimeout(async ()=>{
+        //         res = await fetchGenerateMnemonic();
+        //     })
+        // }
     }, 2000);
 
     AppStore.subscribe((appstore) => {

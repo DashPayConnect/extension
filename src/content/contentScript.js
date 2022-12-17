@@ -1,7 +1,7 @@
 let serviceWorkerPort;
 const ServiceWorkerPort = require('../primitives/ServiceWorkerPort');
 const StdMessage = require('../primitives/StdMessage');
-const editorExtensionId = "kcaghheadgiepldjcemnmnmpkfchmpma";
+const editorExtensionId = "camoceckaeifkkpepgjoccjfjkcjhojc";
 
 // chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 //     console.log({messageFromContentScript: message});
