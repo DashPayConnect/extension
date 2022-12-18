@@ -11,7 +11,15 @@
     function onEllipsisClick(){
         showEllipsisMenu = true;
     }
-    let account = $AccountStore[Object.keys($AccountStore)[0]];
+
+
+
+
+    let account = globalThis.client.currentAccount;
+
+
+
+    // let account = $AccountStore[Object.keys($AccountStore)[0]];
     let address;
     let balance = 0;
     let fiatBalance = '0,00';
@@ -24,12 +32,22 @@
                 fiatBalance = Number(balance * price).toFixed(2)
             })
     }
-    if(account){
-        balance = globalThis.client.currentAccount.balance;
-        address = account.address.address;
-        accountName = (account.accountIndex === 0) ? 'Main account' : `Account ${account.accountIndex}`;
-        fetchRateForBalance();
+
+    function setAccount(_account){
+        console.log('set account', _account)
+            balance = globalThis.client.currentAccount.balance;
+            address = _account.address.address;
+            console.log(_account);
+            accountName = (_account.accountIndex === 0) ? 'Main account' : `Account ${_account.accountIndex}`;
+            fetchRateForBalance();
     }
+    setAccount(account);
+    globalThis.emitter.on('SWITCH_ACCOUNT',()=> {
+        setAccount(globalThis.client.currentAccount)
+    });
+
+
+
     function onAddressClick(){
         window.navigator.clipboard.writeText(address);
     }

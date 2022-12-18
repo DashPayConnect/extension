@@ -125,7 +125,13 @@ const createAppStore = () => {
         },
         importAccount: (accountInfoObj) => {
             AppStore.update(appStore => {
-                appStore.accounts.push(accountInfoObj);
+                if(!appStore.accounts.find((el)=>{
+                    console.log(el);
+                   return el.walletId === accountInfoObj.walletId
+                    && el.accountIndex === accountInfoObj.accountIndex;
+                })){
+                    appStore.accounts.push(accountInfoObj);
+                }
                 return appStore;
             })
         },

@@ -3,7 +3,7 @@
     import Dashboard from "./components/Dashboard/Dashboard.svelte";
     import OnBoarding from "./components/OnBoarding/OnBoarding.svelte";
     import Footer from "./components/Footer/Footer.svelte";
-
+    import EventEmitter from 'events'
     import {
         onMount,
         onDestroy,
@@ -20,10 +20,18 @@
     import {AppStore, logs, WalletStore} from './stores/stores'
     import {Client} from "../../js-library";
 
+    global.emitter = new EventEmitter();
     const client = new Client();
     globalThis.client = client;
     const editorExtensionId = "camoceckaeifkkpepgjoccjfjkcjhojc";
-    client.connect().then(()=> isInitialized = true);
+    console.log('[APP] Connecting...')
+    client.connect().then(()=> {
+        isInitialized = true;
+        console.log('[APP] Initialized');
+        console.log($WalletStore)
+        console.log(Object.keys($WalletStore))
+        console.log(Object.keys($WalletStore).length)
+    });
 
     setContext("app_functions", {
         // switchPage: (name, data) => switchPage(name, data),

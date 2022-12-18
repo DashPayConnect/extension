@@ -9,9 +9,10 @@ class DashManager {
     async init(){
         console.log(`[DashManager] Initializing...`)
         const {currentAccount, currentWallet} = this.storage.object;
-
-        const { mnemonic } = this.storage.object.wallets[currentWallet];
-        await this.createInstance({mnemonic, index: currentAccount});
+        if(this.storage.object.wallets && this.storage.object.wallets[currentWallet]){
+            const { mnemonic } = this.storage.object.wallets[currentWallet];
+            await this.createInstance({mnemonic, index: currentAccount});
+        }
     }
     getInstance(walletId){
         return this.instances[walletId];

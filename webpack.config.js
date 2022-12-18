@@ -21,6 +21,7 @@ module.exports = {
     entry: {
         serviceWorker: './src/worker/serviceWorker.js',
         contentScript: './src/content/contentScript.js',
+        popup: './src/views/popup/popup.js',
     },
     target: 'web',
     devtool: 'source-map',
