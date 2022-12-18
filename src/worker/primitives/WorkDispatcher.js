@@ -19,12 +19,14 @@ class WorkDispatcher {
         }
         return request;
     }
-    connect(request){
-        const account = this.fetch({args: ['ACCOUNT']}).args[1];
+    async connect(request){
+        const fetchReq = await this.fetch({args: ['ACCOUNT']});
+        console.log({fetchReq});
+        const [,account] = fetchReq.args;
         request.args.push(account);
         return request
     }
-    fetch(request) {
+    async fetch(request) {
         const fetchType = request.args[0];
         console.log({fetchType});
         switch (fetchType) {
@@ -34,8 +36,8 @@ class WorkDispatcher {
                 if(entries.length){
                     const account = this.dashManager.getInstance(entries[0][0]).currentAccount;
                     console.log(account);
-                    const { accountPath, walletId, walletType } = account;
-                    const accountObj = { accountPath, walletId, walletType, address: account.getAddress(0) };
+                    const { accountPath, walletId, walletType, index: accountIndex } = account;
+                    const accountObj = { accountIndex, accountPath, walletId, walletType, address: account.getAddress(0) };
                     request.args.push(accountObj);
                 }
                 break;
@@ -67,11 +69,25 @@ class WorkDispatcher {
     async execute(request) {
         const executeType = request.args[0];
         switch (executeType) {
+            case "TRANSACTION":
+                const [,address, amount ]= request.args;
+                const instance = await this.dashManager.getInstance(this.storage.object.currentWallet);
+                try {
+                    const tx = instance.currentAccount.createTransaction({recipient: address, amount});
+                    console.log(tx);
+                    const txid = instance.currentAccount.broadcastTransaction(tx);
+                    console.log(txid);
+                    request.args.push(txid);
+                }catch (e) {
+                    request.args.push(e.message);
+                }
+                break;
             case "SWITCH_ACCOUNT":
                 const walletId = request.args[1];
                 const accountIndex = request.args[2];
                 await this.dashManager.switchAccountInstance(walletId, accountIndex);
                 request.args.push(true);
+                break;
             default:
                 console.error(`Unexpected execute work requested`, JSON.stringify(request));
         }

@@ -22,9 +22,16 @@
     function onExportKeyClick(){
         alert($AppStore.wallets[Object.keys($AppStore.wallets)[0]].value);
     }
-
-    function onSendClick(){
+    function onAddressClick(){
+        window.navigator.clipboard.writeText(receivingAddress);
+    }
+    async function onSendClick(){
         alert(`Paying ${sendingAmount} to ${sendingAddress}`)
+        await globalThis.client.requestTransaction({
+            address: sendingAddress,
+            amount: sendingAmount
+        });
+        alert('Paid!');
     }
     // function closeEllipsisMenu(){
 
@@ -60,6 +67,6 @@
     {/if}
     {#if screen === 'receive'}
         <div id="qrcode"></div>
-        <p style="text-align: center">{receivingAddress}</p>
+        <p style="text-align: center"  class="text-hover" data-hover="Click to copy" on:click={onAddressClick}>{receivingAddress}</p>
     {/if}
 </nav>

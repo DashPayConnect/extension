@@ -12,5 +12,13 @@ import SecureStorage from './primitives/SecureStorage';
     const workDispatcher = new WorkDispatcher(dashManager, storage);
     const messageHandler = new MessageHandler(workDispatcher);
     messageHandler.setListeners();
+
+    globalThis.worker = {
+        version: require('../../static/manifest.json').version,
+        storage,
+        dashManager,
+        workDispatcher,
+        messageHandler
+    };
 })()
 
