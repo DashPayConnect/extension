@@ -13,10 +13,22 @@
     }
     let account = $AccountStore[Object.keys($AccountStore)[0]];
     let address;
+    let balance = 0;
+    let fiatBalance = '0,00';
     let accountName;
+
+    function fetchRateForBalance(){
+        fetch('https://rates2.dashretail.org/rates?source=dashretail&symbol=dashusd')
+            .then(async (res)=>{
+                const [{price}] = (await res.json());
+                fiatBalance = Number(balance * price).toFixed(2)
+            })
+    }
     if(account){
+        balance = globalThis.client.currentAccount.balance;
         address = account.address.address;
         accountName = (account.accountIndex === 0) ? 'Main account' : `Account ${account.accountIndex}`;
+        fetchRateForBalance();
     }
     function onAddressClick(){
         window.navigator.clipboard.writeText(address);
@@ -37,8 +49,8 @@
     </button>
     <section class="balance_wrapper">
         <p class="balance_wrapper__account-dash">{accountName} </p>
-        <p class="balance_wrapper__amount-dash">0</p>
-        <p class="balance_wrapper__amount-fiat">0,00$</p>
+        <p class="balance_wrapper__amount-dash">{balance}</p>
+        <p class="balance_wrapper__amount-fiat">$ {fiatBalance}</p>
     </section>
     <section class="options_wrapper">
         <img alt="options ellipsis logo"  class="ellipsis-menu-button" src="img/ellipsis-v.svg" width="6px" on:click={onEllipsisClick}/>

@@ -89,10 +89,10 @@
                     client.sendMessage({action: 'CREATE', args: ['WALLET_FROM_MNEMONIC', mnemonic]})
                     setTimeout(async ()=>{
                         const fetchReq = await client.sendMessage({action: 'FETCH', args: ['ACCOUNT']})
-                        const account = fetchReq.args[1];
+                        const [,account, balance] = fetchReq.args;
                         console.log(account, await client.getCurrentAccount(), await client.fetchCurrentAccount());
                         AppStore.importWallet({walletId: walletId, type:'mnemonic', value: mnemonic});
-                        AppStore.importAccount({walletId: walletId, ...account});
+                        AppStore.importAccount({walletId: walletId, ...account, balance});
                     }, 2000)
 
                 }}>Next</button>

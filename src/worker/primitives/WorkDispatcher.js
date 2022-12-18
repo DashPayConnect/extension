@@ -29,21 +29,19 @@ class WorkDispatcher {
     async fetch(request) {
         const fetchType = request.args[0];
         console.log({fetchType});
+        const entries = Object.entries(this.dashManager.instances);
         switch (fetchType) {
             case 'ACCOUNT':
-                const entries = Object.entries(this.dashManager.instances);
-                console.log(entries);
                 if(entries.length){
                     const account = this.dashManager.getInstance(entries[0][0]).currentAccount;
                     console.log(account);
                     const { accountPath, walletId, walletType, index: accountIndex } = account;
                     const accountObj = { accountIndex, accountPath, walletId, walletType, address: account.getAddress(0) };
                     request.args.push(accountObj);
+                    request.args.push(await account.getConfirmedBalance());
                 }
                 break;
             case 'ADDRESS':
-                break;
-            case "BALANCE":
                 break;
             default:
                 console.error(`Unexpected fetch work requested`, fetchType, JSON.stringify(request));
