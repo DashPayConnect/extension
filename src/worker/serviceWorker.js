@@ -2,21 +2,24 @@ import DashManager from './primitives/DashManager';
 import MessageHandler from './primitives/MessageHandler';
 import WorkDispatcher from './primitives/WorkDispatcher';
 import SecureStorage from './primitives/SecureStorage';
+import SubscribableStore from './primitives/SubscribableStore';
 
 
 (async()=>{
     globalThis.worker = {
         version: require('../../static/manifest.json').version,
     };
-    const storage = new SecureStorage();
-    await storage.init();
-    globalThis.worker.storage = storage;
+    console.log('[ServiceWorker] Initializing...', globalThis.worker.version);
+    const secureStorage = new SecureStorage();
+    await secureStorage.init();
 
-    const dashManager = new DashManager(storage);
+    globalThis.worker.storage = secureStorage;
+
+    const dashManager = new DashManager(secureStorage);
     await dashManager.init();
     globalThis.worker.dashManager = dashManager;
 
-    const workDispatcher = new WorkDispatcher(dashManager, storage);
+    const workDispatcher = new WorkDispatcher(dashManager, secureStorage);
     globalThis.worker.workDispatcher = workDispatcher;
 
     const messageHandler = new MessageHandler(workDispatcher);

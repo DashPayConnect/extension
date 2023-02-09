@@ -14,7 +14,9 @@
     "build:full": "webpack && sed -i '' 's/Function(\"return this\")()/(function() { return this || window || global || self; }).call(null)/g' dist/serviceWorker.js",
     "dev:chrome": "NODE_ENV=development TARGET_BROWSER=chrome webpack --watch ",
     "lint": "eslint --ext .ts,.js --max-warnings=0 .",
-    "prettier": "prettier --write"
+    "prettier": "prettier --write",
+    "test": "npm run test:unit",
+    "test:unit": "mocha 'src/**/*.spec.js'"
   },
   "repository": {
     "type": "git",
@@ -49,6 +51,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",
+    "chai": "^4.3.7",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.2",
     "dotenv-webpack": "^8.0.1",
@@ -57,6 +60,7 @@
     "eslint-webpack-plugin": "^3.2.0",
     "extension-port-stream": "^2.0.1",
     "mini-css-extract-plugin": "^2.7.2",
+    "mocha": "^10.2.0",
     "path-browserify": "^1.0.1",
     "post-message-stream": "^3.0.0",
     "prettier": "^2.8.0",

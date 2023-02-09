@@ -34,6 +34,7 @@ class MessageHandler {
         // });
     }
     handleMessage(message, sender, sendResponse){
+        console.log('[MessageHandler] handleMessage', message, sender);
         const {workDispatcher} = this;
         const stdMessage = StdMessage.fromMessage(message, sender)
         let response = stdMessage;

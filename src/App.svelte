@@ -17,7 +17,7 @@
     $: wallets = undefined;
 
     let isInitialized = false
-    import {AppStore, logs, WalletStore} from './stores/stores'
+    import {AppStore, logs, WalletsStore} from './stores/stores'
     import {Client} from "../../js-library";
 
     global.emitter = new EventEmitter();
@@ -28,9 +28,9 @@
     client.connect().then(()=> {
         isInitialized = true;
         console.log('[APP] Initialized');
-        console.log($WalletStore)
-        console.log(Object.keys($WalletStore))
-        console.log(Object.keys($WalletStore).length)
+        console.log({App_WalletsStore: $WalletsStore})
+        console.log(Object.keys($WalletsStore))
+        console.log(Object.keys($WalletsStore).length)
     });
 
     setContext("app_functions", {
@@ -49,7 +49,7 @@
 <div>
 
     {#if isInitialized}
-        {#if !Object.keys($WalletStore).length}
+        {#if !Object.keys($WalletsStore).length}
             <svelte:component this="{OnBoarding}" />
         {:else}
             <svelte:component this={Header} />

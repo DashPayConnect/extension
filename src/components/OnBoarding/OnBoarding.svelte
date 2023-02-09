@@ -24,9 +24,9 @@
     setTimeout(()=>{ mnemonic = 'Generating.....'}, 1400);
 
     async function fetchGenerateMnemonic(){
-        console.log('GENEATE');
+        console.log('[ONBOARDING] FetchGenerateMnemonic');
         const res = await client.sendMessage({action: 'GENERATE', args: ['MNEMONIC']});
-        console.log('GENERATED', res);
+        console.log('[ONBOARDING] Generated', res);
         if(res && res.args){
             mnemonic = res.args[1];
             walletId = res.args[2];
@@ -90,7 +90,9 @@
                     setTimeout(async ()=>{
                         const fetchReq = await client.sendMessage({action: 'FETCH', args: ['ACCOUNT']})
                         const [,account, balance] = fetchReq.args;
-                        console.log(account, await client.getCurrentAccount(), await client.fetchCurrentAccount());
+                        const walletIdRes = await client.sendMessage({action: 'EXECUTE', args: ['MNEMONIC_TO_WALLET_ID', mnemonic]});
+                        walletId = walletIdRes.args[2];
+                        console.log(walletId, account, await client.getCurrentAccount(), await client.fetchCurrentAccount());
                         AppStore.importWallet({walletId: walletId, type:'mnemonic', value: mnemonic});
                         AppStore.importAccount({walletId: walletId, ...account, balance});
                     }, 2000)

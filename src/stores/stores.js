@@ -24,7 +24,7 @@ const createAppStore = () => {
     const AppStore = writable(defaultAppStore);
 
     const isExtension = (chrome.storage?.local) ? true : false;
-    const getStore = () => {
+    const getAppStoreState = () => {
         //Set the Store to the value of the chome.storage.local
 
         if (isExtension) {
@@ -34,7 +34,7 @@ const createAppStore = () => {
                 }
 
                 initialized = true;
-                // defalut USD fiat
+                // default USD fiat
                 if (!currentStoredStore.app.settings.fiat) {
                     currentStoredStore.app.settings.fiat = "USD"
                 }
@@ -44,7 +44,7 @@ const createAppStore = () => {
             let currentStoredStore = (JSON.parse(localStorage.getItem("app")) || defaultAppStore);
             if (!currentStoredStore.logs.firstRun) {
                 currentStoredStore.logs.firstRun = +new Date();
-                // // defalut USD fiat
+                // default USD fiat
                 if (!currentStoredStore.settings.fiat) {
                     currentStoredStore.settings.fiat = "USD"
                 }
@@ -67,27 +67,29 @@ const createAppStore = () => {
         if (isExtension) {
             if (currentAppStore.currentPage) {
                 console.log('AppStore saved to localStore');
+                console.log({currentAppStore});
+                // TODO: check if possible to use SecureStorage
                 chrome.storage.local.set({"app": currentAppStore});
             } else {
                 console.log('Recovering...');
                 //Recover store value in memory to previous chome.storage.local value
-                getStore();
+                getAppStoreState();
             }
         } else {
             if (currentAppStore.currentPage) {
                 console.log('AppStore saved to localStore');
-                console.log(currentAppStore);
+                console.log({currentAppStore});
                 localStorage.setItem("app", JSON.stringify(currentAppStore));
             } else {
                 console.log('Recovering...');
                 //Recover store value in memory to previous chome.storage.local value
-                getStore();
+                getAppStoreState();
             }
         }
 
     });
 
-    getStore();
+    getAppStoreState();
 
     let subscribe = AppStore.subscribe;
     let update = AppStore.update;
@@ -101,6 +103,7 @@ const createAppStore = () => {
         //Change the current page of the app
         //an also accept a data package the new page may need;
         changePage: (pageInfoObj) => {
+            console.log('AppStore changePage...', pageInfoObj);
             // //Return if the object isn't a proper page object
             // if (!isPageInfoObj(pageInfoObj)) return;
             //
@@ -111,19 +114,22 @@ const createAppStore = () => {
             })
         },
         fullReset: () => {
+            console.log('AppStore fullReset...');
             AppStore.update(appStore => {
                 appStore = defaultAppStore;
                 return appStore;
             })
         },
         importWallet: (walletInfoObj) => {
-           AppStore.update(appStore => {
+            console.log('AppStore importWallet...');
+            AppStore.update(appStore => {
                console.log(walletInfoObj);
                appStore.wallets[walletInfoObj.walletId] = walletInfoObj;
                return appStore;
            })
         },
         importAccount: (accountInfoObj) => {
+            console.log('AppStore importAccount...');
             AppStore.update(appStore => {
                 if(!appStore.accounts.find((el)=>{
                     console.log(el);
@@ -200,7 +206,7 @@ export const logs = derived(
     }
 );
 
-export const WalletStore = derived(
+export const WalletsStore = derived(
     AppStore,
     $AppStore => { return $AppStore.wallets }
 );

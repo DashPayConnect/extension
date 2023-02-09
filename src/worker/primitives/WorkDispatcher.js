@@ -3,9 +3,13 @@ class WorkDispatcher {
     constructor(dashManager, storage) {
         this.dashManager = dashManager;
         this.storage = storage
+        console.log('[WorkDispatcher] Created');
+
     }
 
     async create(request) {
+        console.log('[WorkDispatcher] Create request', request);
+
         const createType = request.args[0];
         const mnemonic = request.args[1];
         switch (createType) {
@@ -20,6 +24,7 @@ class WorkDispatcher {
         return request;
     }
     async connect(request){
+        console.log('[WorkDispatcher] Connect request', request);
         const fetchReq = await this.fetch({args: ['ACCOUNT']});
         console.log({fetchReq});
         const [,account] = fetchReq.args;
@@ -27,11 +32,13 @@ class WorkDispatcher {
         return request
     }
     async fetch(request) {
+        console.log('[WorkDispatcher] Fetch request', request);
         const fetchType = request.args[0];
         console.log({fetchType});
         const entries = Object.entries(this.dashManager.instances);
         switch (fetchType) {
             case 'ACCOUNT':
+                console.log('dashmanagerstate',this.dashManager)
                 if(entries.length){
                     const account = this.dashManager.getInstance(entries[0][0]).currentAccount;
                     console.log(account);
@@ -51,6 +58,7 @@ class WorkDispatcher {
     }
 
     generate(request) {
+        console.log('[WorkDispatcher] Generate request', request);
         const generateType = request.args[0];
         switch (generateType) {
             case "MNEMONIC":
@@ -65,6 +73,7 @@ class WorkDispatcher {
     }
 
     async execute(request) {
+        console.log('[WorkDispatcher] Execute request', request);
         const executeType = request.args[0];
         switch (executeType) {
             case "TRANSACTION":
