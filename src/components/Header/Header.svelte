@@ -20,7 +20,7 @@
 
 
     // let account = $AccountStore[Object.keys($AccountStore)[0]];
-    let address;
+    let address = '';
     let balance = 0;
     let fiatBalance = '0,00';
     let accountName;
@@ -34,15 +34,15 @@
     }
 
     function setAccount(_account){
-        console.log('set account', _account)
-            balance = globalThis.client.currentAccount.balance;
-            address = _account.address.address;
-            console.log(_account);
-            accountName = (_account.accountIndex === 0) ? 'Main account' : `Account ${_account.accountIndex}`;
+            console.log('Header set account', JSON.stringify({_account}))
+            balance = globalThis?.client?.currentAccount?.balance || 0;
+            address = _account?.address?.address || '';
+            accountName = (_account?.accountIndex === 0) ? 'Main account' : `Account ${_account.accountIndex}`;
             fetchRateForBalance();
     }
     setAccount(account);
-    globalThis.emitter.on('SWITCH_ACCOUNT',()=> {
+    globalThis.emitter.on('SWITCH_ACCOUNT',(stuff)=> {
+        console.log('SWITCH ACCOUNT', {stuff})
         setAccount(globalThis.client.currentAccount)
     });
 
@@ -56,6 +56,9 @@
     }
     function openSendModal(){
         showSendModal = true
+    }
+    function onCloseEllipsisMenu(){
+        showEllipsisMenu = false;
     }
 </script>
 <header>
@@ -79,7 +82,7 @@
     </div>
 </header>
 {#if showEllipsisMenu}
-    <EllipsisMenu on:closeEllipsisMenu="{() => showEllipsisMenu = false}" />
+    <EllipsisMenu on:closeEllipsisMenu="{onCloseEllipsisMenu}" on:click />
 {/if}
 {#if showReceiveModal}
     <PaymentModal on:closePaymentModal="{() => showReceiveModal = false}" screen="receive"/>

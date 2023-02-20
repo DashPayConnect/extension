@@ -8,6 +8,7 @@
     const client = globalThis.client;
 
     let showAccountsModal = false;
+    let showNetworkModal = false;
     function onOpenAccountClick(){
         showAccountsModal = true;
     }
@@ -34,21 +35,35 @@
         showAccountsModal = true;
     }
     function onExportKeyClick(){
-        if(confirm('Confirm creating a new account ?')) {
+        if(confirm('Displaying your mnemonic may cause a security risk. Are you sure ?')) {
             alert($AppStore.wallets[Object.keys($AppStore.wallets)[0]].value);
         }
     }
-    // function closeEllipsisMenu(){
+    function onNetworkClick(){
+        showNetworkModal = true
+    }
 
+    // function closeEllipsisMenu(){
+    function onSettingsClick(){
+        dispatch('click', 'SETTINGS_SCREEN');
+        AppStore.changePage({name: 'settingsScreen'});
+        // closeEllipsisMenu();
+    };
     // }
 </script>
 <div class="ellipsis-menu-background" on:click={closeEllipsisMenu}></div>
 
 <nav class="ellipsis-menu">
-    <button on:click={onExportKeyClick}>Export Mnemonic</button>
-    <button on:click={onFullResetClick}>Full Reset</button>
-    <button on:click={onSwitchAccountClick}>Switch Account</button>
-    <button on:click={onCreateAccountClick}>Create New Account</button>
+    <button>Accounts</button>
+    <button on:click={onSettingsClick}>Settings</button>
+    <button on:click={onExportKeyClick}>Security</button>
+    <button><span>Version: 1.0.0</span></button>
+
+<!--    <button on:click={onExportKeyClick}>Export Mnemonic</button>-->
+<!--    <button on:click={onFullResetClick}>Full Reset</button>-->
+<!--    <button on:click={onSwitchAccountClick}>Switch Account</button>-->
+<!--    <button on:click={onCreateAccountClick}>Create New Account</button>-->
+<!--    <button on:click={onNetworkClick}>Network</button>-->
 </nav>
 {#if showAccountsModal}
     <AccountsModal on:closeAccountsModal="{() => showAccountsModal = false}" />

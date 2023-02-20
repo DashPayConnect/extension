@@ -10,12 +10,15 @@ const defaultAppStore = {
     logs: {
         firstRun: null,
     },
-    wallets: {
-
-    },
+    wallets: {},
+    networks: [
+        {name: 'testnet'},
+        {name: 'mainnet'}
+    ],
     accounts: [],
     settings: {
-        fiat: ''
+        fiat: '',
+        network: 'testnet'
     }
 }
 
@@ -123,19 +126,19 @@ const createAppStore = () => {
         importWallet: (walletInfoObj) => {
             console.log('AppStore importWallet...');
             AppStore.update(appStore => {
-               console.log(walletInfoObj);
-               appStore.wallets[walletInfoObj.walletId] = walletInfoObj;
-               return appStore;
-           })
+                console.log(walletInfoObj);
+                appStore.wallets[walletInfoObj.walletId] = walletInfoObj;
+                return appStore;
+            })
         },
         importAccount: (accountInfoObj) => {
             console.log('AppStore importAccount...');
             AppStore.update(appStore => {
-                if(!appStore.accounts.find((el)=>{
+                if (!appStore.accounts.find((el) => {
                     console.log(el);
-                   return el.walletId === accountInfoObj.walletId
-                    && el.accountIndex === accountInfoObj.accountIndex;
-                })){
+                    return el.walletId === accountInfoObj.walletId
+                        && el.accountIndex === accountInfoObj.accountIndex;
+                })) {
                     appStore.accounts.push(accountInfoObj);
                 }
                 return appStore;
@@ -208,11 +211,15 @@ export const logs = derived(
 
 export const WalletsStore = derived(
     AppStore,
-    $AppStore => { return $AppStore.wallets }
+    $AppStore => {
+        return $AppStore.wallets
+    }
 );
 
 
 export const AccountStore = derived(
     AppStore,
-    $AppStore => { return $AppStore.accounts }
+    $AppStore => {
+        return $AppStore.accounts
+    }
 );

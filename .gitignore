@@ -1,1 +1,7 @@
 node_modules
+
+src/worker/serviceWorkerold.js
+
+src/worker/test.js
+
+.idea/

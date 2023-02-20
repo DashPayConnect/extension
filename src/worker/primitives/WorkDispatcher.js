@@ -1,4 +1,8 @@
+const {mnemonicToWalletId} = require('@dashevo/wallet-lib/src/utils/mnemonic');
+
+
 // Handle and dispatch received message accross the service worker.
+
 class WorkDispatcher {
     constructor(dashManager, storage) {
         this.dashManager = dashManager;
@@ -90,14 +94,20 @@ class WorkDispatcher {
                 }
                 break;
             case "SWITCH_ACCOUNT":
-                const walletId = request.args[1];
+                const accountWalletId = request.args[1];
                 const accountIndex = request.args[2];
-                await this.dashManager.switchAccountInstance(walletId, accountIndex);
+                await this.dashManager.switchAccountInstance(accountWalletId, accountIndex);
                 request.args.push(true);
+                break;
+            case "MNEMONIC_TO_WALLET_ID":
+                const mnemonic = request.args[1];
+                const walletId = await mnemonicToWalletId(mnemonic);
+                request.args.push(walletId);
                 break;
             default:
                 console.error(`Unexpected execute work requested`, JSON.stringify(request));
         }
+        console.log('[WorkDispatcher] Returning request', request);
         return request;
     }
 };
