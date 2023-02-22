@@ -11,6 +11,19 @@
 
     export let screen;
 
+    async function fetchRate(){
+        return fetch('https://rates2.dashretail.org/rates?source=dashretail&symbol=dashusd')
+            .then(async (res)=>{
+                const [{price}] = (await res.json());
+                return price;
+            })
+    }
+
+    let rate = 70;
+    fetchRate().then((fetchedRate) => {
+        rate = fetchedRate;
+    });
+
     let sendingAmount = 0;
     let sendingAmountInFiat = 0;
     let sendingAddress = '';
@@ -57,7 +70,7 @@
 
     function updateSendingAmountInFiat(){
         console.log('Update value');
-        sendingAmountInFiat = sendingAmount * 71;
+        sendingAmountInFiat = sendingAmount * rate;
     }
 
     function onDisplayContactListClick() {
