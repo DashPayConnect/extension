@@ -1,4 +1,5 @@
 const {mnemonicToWalletId} = require('@dashevo/wallet-lib/src/utils/mnemonic');
+const {ca} = require("timeago.js/lib/lang");
 
 
 // Handle and dispatch received message accross the service worker.
@@ -18,7 +19,8 @@ class WorkDispatcher {
         const mnemonic = request.args[1];
         switch (createType) {
             case 'WALLET_FROM_MNEMONIC':
-                const instance = await this.dashManager.createInstance({mnemonic});
+                const network = request.args[2] ?? 'testnet';
+                const instance = await this.dashManager.createInstance({mnemonic, network});
                 request.args.push(instance.currentAccount.getUnusedAddress());
                 return;
             default:
@@ -76,6 +78,24 @@ class WorkDispatcher {
         return request;
     }
 
+    async update(request) {
+        console.log('[WorkDispatcher] Update request', request);
+        const updateType = request.args[0];
+        const [,walletId, accountIndex, network, offlineMode] = request.args;
+        console.log(request.args);
+        switch (updateType) {
+            case "NETWORK":
+                await this.dashManager.changeAccountInstanceNetwork(walletId, accountIndex, network, offlineMode);
+                request.args.push(network);
+                break;
+            case "OFFLINE_MODE":
+                await this.dashManager.changeAccountInstanceNetwork(walletId, accountIndex, network, offlineMode);
+                request.args.push(offlineMode);
+            default:
+                console.error(`Unexpected update work requested`, JSON.stringify(request));
+        }
+        return request;
+    }
     async execute(request) {
         console.log('[WorkDispatcher] Execute request', request);
         const executeType = request.args[0];

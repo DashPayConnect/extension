@@ -7,7 +7,7 @@
         import {Client} from "../../../../js-library/src/index";
 
     require('./onboarding.scss')
-    import {AppStore, currentPage} from '../../stores/stores';
+    import {AppStore, currentPage, SettingsStore} from '../../stores/stores';
 
     let showCreateWalletScreen = false;
     let showImportWalletScreen = false;
@@ -86,7 +86,7 @@
                 <div class="mnemonic-display">{mnemonic}</div>
                 <button on:click={() => AppStore.changePage({name:'onboardingScreen'})}>Back</button>
                 <button on:click={async () =>{
-                    client.sendMessage({action: 'CREATE', args: ['WALLET_FROM_MNEMONIC', mnemonic]})
+                    client.sendMessage({action: 'CREATE', args: ['WALLET_FROM_MNEMONIC', mnemonic, $SettingsStore.network]})
                     setTimeout(async ()=>{
                         const fetchReq = await client.sendMessage({action: 'FETCH', args: ['ACCOUNT']})
                         const [,account, balance] = fetchReq.args;
@@ -94,7 +94,10 @@
                         walletId = walletIdRes.args[2];
                         console.log(walletId, account, await client.getCurrentAccount(), await client.fetchCurrentAccount());
                         AppStore.importWallet({walletId: walletId, type:'mnemonic', value: mnemonic});
+                        AppStore.changeCurrentWallet(walletId);
+
                         AppStore.importAccount({walletId: walletId, ...account, balance});
+                        AppStore.changeCurrentAccount(account.accountIndex);
                     }, 2000)
 
                 }}>Next</button>
@@ -108,9 +111,11 @@
                 const walletIdRes = await client.sendMessage({action: 'EXECUTE', args: ['MNEMONIC_TO_WALLET_ID', importMnemonic]});
                 walletId = walletIdRes.args[2];
                 AppStore.importWallet({walletId, type:'mnemonic', value: importMnemonic});
-                const createReq = await client.sendMessage({action: 'CREATE', args: ['WALLET_FROM_MNEMONIC', importMnemonic]})
+                AppStore.changeCurrentWallet(walletId);
+                const createReq = await client.sendMessage({action: 'CREATE', args: ['WALLET_FROM_MNEMONIC', importMnemonic, $SettingsStore.network]})
                 const account = createReq.args[2];
                 AppStore.importAccount({walletId: walletId, ...account});
+                AppStore.changeCurrentAccount(account.accountIndex);
                }
             }>Next</button>
             </div>

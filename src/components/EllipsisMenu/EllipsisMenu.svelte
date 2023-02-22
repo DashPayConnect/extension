@@ -49,21 +49,22 @@
         AppStore.changePage({name: 'settingsScreen'});
         // closeEllipsisMenu();
     };
+    function onSecurityClick(){
+        dispatch('click', 'SECURITY_SCREEN');
+        AppStore.changePage({name: 'securityScreen'});
+    };
+    function onAccountsClick(){
+        onOpenAccountClick();
+    };
     // }
 </script>
 <div class="ellipsis-menu-background" on:click={closeEllipsisMenu}></div>
 
 <nav class="ellipsis-menu">
-    <button>Accounts</button>
+    <button on:click={onAccountsClick}>Accounts</button>
     <button on:click={onSettingsClick}>Settings</button>
-    <button on:click={onExportKeyClick}>Security</button>
-    <button><span>Version: 1.0.0</span></button>
-
-<!--    <button on:click={onExportKeyClick}>Export Mnemonic</button>-->
-<!--    <button on:click={onFullResetClick}>Full Reset</button>-->
-<!--    <button on:click={onSwitchAccountClick}>Switch Account</button>-->
-<!--    <button on:click={onCreateAccountClick}>Create New Account</button>-->
-<!--    <button on:click={onNetworkClick}>Network</button>-->
+    <button on:click={onSecurityClick}>Security</button>
+    <span style="color:black">Version: 1.0.0</span>
 </nav>
 {#if showAccountsModal}
     <AccountsModal on:closeAccountsModal="{() => showAccountsModal = false}" />

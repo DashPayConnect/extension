@@ -10,15 +10,20 @@ const defaultAppStore = {
     logs: {
         firstRun: null,
     },
+    currentAccount: 0,
+    currentWallet: '',
     wallets: {},
     networks: [
         {name: 'testnet'},
-        {name: 'mainnet'}
+        {name: 'livenet'},
+        {name: 'devnet'},
     ],
     accounts: [],
     settings: {
-        fiat: '',
-        network: 'testnet'
+        fiat: 'USD',
+        i18n: 'en',
+        network: 'testnet',
+        offlineMode: true,
     }
 }
 
@@ -116,6 +121,20 @@ const createAppStore = () => {
                 return appStore;
             })
         },
+        changeCurrentAccount: (accountIndex) => {
+            console.log('AppStore changeCurrentAccount...', accountIndex);
+            AppStore.update(appStore => {
+                appStore.currentAccount = accountIndex;
+                return appStore;
+            })
+        },
+        changeCurrentWallet: (walletId) => {
+            console.log('AppStore changeCurrentWallet...', walletId);
+            AppStore.update(appStore => {
+                appStore.currentWallet = walletId;
+                return appStore;
+            })
+        },
         fullReset: () => {
             console.log('AppStore fullReset...');
             AppStore.update(appStore => {
@@ -184,7 +203,25 @@ const createAppStore = () => {
         },
         setFiatCurrency: (value) => {
             AppStore.update(appStore => {
-                appStore.fiat = value;
+                appStore.settings.fiat = value;
+                return appStore;
+            })
+        },
+        setI18nValue: (value) => {
+            AppStore.update(appStore => {
+                appStore.settings.i18n = value;
+                return appStore;
+            })
+        },
+        setNetwork: (value) => {
+            AppStore.update(appStore => {
+                appStore.settings.network = value;
+                return appStore;
+            })
+        },
+        setOfflineMode: (value) => {
+            AppStore.update(appStore => {
+                appStore.settings.offlineMode = value;
                 return appStore;
             })
         }
@@ -209,6 +246,18 @@ export const logs = derived(
     }
 );
 
+export const currentAccount = derived(
+    AppStore,
+    $AppStore => {
+        return $AppStore.currentAccount
+    });
+
+export const currentWallet = derived(
+    AppStore,
+    $AppStore => {
+        return $AppStore.currentWallet
+    });
+
 export const WalletsStore = derived(
     AppStore,
     $AppStore => {
@@ -216,10 +265,22 @@ export const WalletsStore = derived(
     }
 );
 
-
+export const NetworksStore = derived(
+    AppStore,
+    $AppStore => {
+        return $AppStore.networks
+    }
+);
 export const AccountStore = derived(
     AppStore,
     $AppStore => {
         return $AppStore.accounts
+    }
+);
+
+export const SettingsStore = derived(
+    AppStore,
+    $AppStore => {
+        return $AppStore.settings
     }
 );

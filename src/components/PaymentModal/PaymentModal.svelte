@@ -51,13 +51,12 @@
 
 <nav class="payment-modal">
     <button class="payment-modal-close-button" on:click={closePaymentModal}>X</button>
-    <h1>Payments</h1>
     {#if screen === 'send'}
+        <h1>Send</h1>
         <form>
-            <p>Send:</p>
             <input type="number" bind:value={sendingAmount} /> Dash
 
-            <p>To Address:</p>
+            <p>To</p>
             <input type="text" bind:value={sendingAddress} />
 
             <span style="margin-top: 10px">
@@ -66,6 +65,7 @@
         </form>
     {/if}
     {#if screen === 'receive'}
+        <h1>Receive</h1>
         <div id="qrcode"></div>
         <p style="text-align: center"  class="text-hover" data-hover="Click to copy" on:click={onAddressClick}>{receivingAddress}</p>
     {/if}

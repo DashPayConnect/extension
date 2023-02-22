@@ -1,5 +1,5 @@
 <script>
-    import {AppStore} from "../../stores/stores";
+    import {AppStore, SettingsStore} from "../../stores/stores";
 
     require('./currency.scss')
     import Tabs from '../Tabs/Tabs.svelte';
@@ -7,6 +7,7 @@
     import TabPanel from '../Tabs/TabPanel.svelte';
     import Tab from '../Tabs/Tab.svelte';
     import {createEventDispatcher} from "svelte";
+    import {fi} from "timeago.js/lib/lang";
     const dispatch = createEventDispatcher();
 
     function onCurrencyClick(){
@@ -22,19 +23,24 @@
         AppStore.changePage({name: 'dashboardScreen'});
     }
     function onSelectCurrencyClick(){
-        const x = this.isoCode ?? 'USD_DEFAULT';
-        alert("CURRENCY: "+x.toString());
+        const x = this.isoCode ?? 'USD';
+        AppStore.setFiatCurrency(x);
+        onBackClick();
     }
+    const availableFiats = [{name:'USD'}];
+    const currentFiat = $SettingsStore.fiat;
 </script>
 
-<section class="page_header">
+<section class="menu_page_header">
     <button class="back-button" on:click={onBackClick}></button>
     <button  class="close-button"  on:click={onCloseClick}></button>
 </section>
-<section class="dashboard_wrapper">
+<section class="menu_page_content">
     <nav class="menu">
-        <button class="menu-tab menu-tab-selected" on:click={onSelectCurrencyClick.bind({isoCode:'USD'})}>
-            <span>USD</span>
-        </button>
+        {#each availableFiats as fiat}
+            <button class="menu-tab {fiat.name === currentFiat ? `menu-tab-selected` : `` }" on:click={onSelectCurrencyClick.bind({isoCode:fiat.name})}>
+                <span>{fiat.name}</span>
+            </button>
+        {/each}
     </nav>
 </section>

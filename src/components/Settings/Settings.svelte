@@ -30,12 +30,11 @@
     }
 </script>
 
-<section class="page_header">
+<section class="menu_page_header">
     <button class="back-button" on:click={onBackClick}></button>
     <button class="close-button" on:click={onCloseClick}></button>
-    <span>Version: 1.0.0</span>
 </section>
-<section class="page_content">
+<section class="menu_page_content">
     <nav class="menu">
         <button class="menu-tab" on:click={onNetworksClick}><span>Networks</span></button>
         <button class="menu-tab" on:click={onCurrencyAndLanguageClick}><span>Currency & Language</span></button>

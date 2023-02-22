@@ -1,4 +1,5 @@
 const Dash = require('../../../../platform/packages/js-dash-sdk/dist/dash.min');
+const {th} = require("timeago.js/lib/lang");
 // Used to work with multiple Dash's instance.
 class DashManager {
     constructor(storage) {
@@ -55,12 +56,36 @@ class DashManager {
                 return instance;
             });
     }
+    async changeAccountInstanceNetwork(walletId, accountIndex, network, offlineMode = true){
+        console.log('[DashManager] Set network...');
+        console.log(walletId, accountIndex, network);
+        console.log(this.instances);
+        let instance = this.getInstance(walletId)
+        if(!instance){
+            console.log(`Current request instance ${walletId} not found. Default on first existing....`)
+            instance = Object.entries(this.instances)[0][1];
+            walletId = instance.walletId;
+        }
+
+        console.log({instance})
+        const walletOpts = {
+            mnemonic: instance.client.wallet.mnemonic,
+            index: instance.currentAccount.index,
+            network: network ?? instance.client.network,
+            offlineMode: offlineMode ?? instance.client.wallet.offlineMode,
+        }
+        const clientOpts = {
+            network: walletOpts.network,
+        }
+        await this.createInstance(walletOpts, clientOpts);
+    }
 
     // Will create a new instance from opts.
-    async createInstance(walletOpts){
+    async createInstance(walletOpts, clientOpts){
         console.log('[DashManager] Create instance...');
+        console.log({walletOpts, clientOpts});
         const instance = {
-            client: new Dash.Client({wallet: {offlineMode: false,...walletOpts}}),
+            client: new Dash.Client({wallet: {offlineMode: true,...walletOpts},...clientOpts}),
             currentAccount: null,
         };
         const walletId = instance.client.wallet.walletId;

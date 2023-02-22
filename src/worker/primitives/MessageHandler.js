@@ -59,6 +59,9 @@ class MessageHandler {
                 case StdMessage.ACTIONS.GENERATE:
                     response = await workDispatcher.generate(stdMessage);
                     break;
+                case StdMessage.ACTIONS.UPDATE:
+                    response = await workDispatcher.update(stdMessage);
+                    break;
                 case StdMessage.ACTIONS.DISCONNECT:
                     console.log('External request to disconnect');
                     break;

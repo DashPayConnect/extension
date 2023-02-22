@@ -24,16 +24,20 @@
     function onSaveClick(){
         alert("SAVE TODO");
     }
+    function onFullResetClick(){
+        if(confirm('Confirming will erase all information stored including all your keys. \n Please ensure you saved them before wiping.')){
+            AppStore.fullReset();
+        }
+    }
     let value = `m/44'/`;
 </script>
 
-<section class="page_header">
+<section class="menu_page_header">
     <button class="back-button" on:click={onBackClick}></button>
     <button  class="close-button"  on:click={onCloseClick}></button>
 </section>
-<section class="dashboard_wrapper">
+<section class="menu_page_content">
     <nav class="menu">
-        <span>BIP 44 Path: <input on:change={onPathValueChange} value="{value}"/></span>
-        <button class="save-button" on:click={onSaveClick}>Save</button>
+        <button class="menu-tab" on:click={onFullResetClick}>Full Extension Reset</button>
     </nav>
 </section>

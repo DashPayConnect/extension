@@ -3,6 +3,7 @@
     import Dashboard from "./components/Dashboard/Dashboard.svelte";
     import AdvancedSettings from "./components/AdvancedSettings/AdvancedSettings.svelte";
     import Settings from "./components/Settings/Settings.svelte";
+    import Security from "./components/Security/Security.svelte";
     import Currency from "./components/Currency/Currency.svelte";
     import Language from "./components/Language/Language.svelte";
     import CurrencyAndLanguage from "./components/CurrencyAndLanguage/CurrencyAndLanguage.svelte";
@@ -69,6 +70,12 @@
                 currentHeader = undefined;
                 currentFooter = undefined;
                 break;
+            case "securityScreen":
+                console.log('securityScreen');
+                currentComponent = Security;
+                currentHeader = undefined;
+                currentFooter = undefined;
+                break;
             case "networksScreen":
                 console.log('networksScreen');
                 currentComponent = Networks;
@@ -111,6 +118,9 @@
             switch (e.detail) {
                 case "SETTINGS_SCREEN":
                     currentComponent = Settings;
+                    break;
+                case "SECURITY_SCREEN":
+                    currentComponent = Security;
                     break;
                 case "NETWORKS_SCREEN":
                     currentComponent = Networks;
