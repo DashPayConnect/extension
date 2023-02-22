@@ -36,6 +36,10 @@
     function setAccount(_account){
             console.log('Header set account', JSON.stringify({_account}))
             balance = globalThis?.client?.currentAccount?.balance || 0;
+            // globalThis.client.on('BALANCE', ()=>{
+            //     balance = globalThis?.client?.currentAccount?.balance || 0;
+            //     fetchRateForBalance();
+            // })
             address = _account?.address?.address || '';
             accountName = (_account?.accountIndex === 0) ? 'Main account' : `Account ${_account.accountIndex}`;
             fetchRateForBalance();

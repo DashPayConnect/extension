@@ -42,11 +42,14 @@ class WorkDispatcher {
         const fetchType = request.args[0];
         console.log({fetchType});
         const entries = Object.entries(this.dashManager.instances);
-        const account = this.dashManager.getInstance(entries[0][0]).currentAccount;
-        console.log(account);
+        let account;
+        if(entries[0] && entries[0][0]){
+            account = await this.dashManager.getInstance(entries[0][0]).currentAccount;
+        }
+        console.log({account});
         switch (fetchType) {
             case 'ACCOUNT':
-                if(entries.length){
+                if(account){
                     const { accountPath, walletId, walletType, index: accountIndex } = account;
                     const accountObj = { accountIndex, accountPath, walletId, walletType, address: account.getAddress(0) };
                     request.args.push(accountObj);
@@ -55,14 +58,20 @@ class WorkDispatcher {
                 }
                 break;
             case 'ADDRESS':
-                const { accountPath, walletId, walletType, index: accountIndex } = account;
-                request.args.push(await account.getAddress());
+                if(account){
+                    const { accountPath, walletId, walletType, index: accountIndex } = account;
+                    request.args.push(await account.getAddress());
+                }
                 break
             case 'BALANCE':
-                request.args.push(await account.getConfirmedBalance());
+                if(account){
+                    request.args.push(await account.getConfirmedBalance());
+                }
                 break;
             case 'TRANSACTION_HISTORY':
-                request.args.push(await account.getTransactionHistory());
+                if(account){
+                    request.args.push(await account.getTransactionHistory());
+                }
                 break;
             default:
                 console.error(`Unexpected fetch work requested`, fetchType, JSON.stringify(request));
