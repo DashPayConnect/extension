@@ -4,6 +4,8 @@
     import AdvancedSettings from "./components/AdvancedSettings/AdvancedSettings.svelte";
     import Settings from "./components/Settings/Settings.svelte";
     import Security from "./components/Security/Security.svelte";
+    import Contact from "./components/Contact/Contact.svelte";
+    import Contacts from "./components/Contacts/Contacts.svelte";
     import Currency from "./components/Currency/Currency.svelte";
     import Language from "./components/Language/Language.svelte";
     import CurrencyAndLanguage from "./components/CurrencyAndLanguage/CurrencyAndLanguage.svelte";
@@ -27,8 +29,9 @@
     let currentComponent = Dashboard;
     let currentHeader = Header;
     let currentFooter = Footer;
-    import {AppStore, logs, WalletsStore} from './stores/stores'
+    import {AppStore, defaultAppStore, logs, WalletsStore} from './stores/stores'
     import {Client} from "../../js-library";
+    import {ca} from "timeago.js/lib/lang";
 
     global.emitter = new EventEmitter();
     const client = new Client();
@@ -58,6 +61,18 @@
 
     AppStore.subscribe((appstore) => {
         switch (appstore.currentPage.name) {
+            case "contactScreen":
+                console.log('ContactScreen');
+                currentComponent = Contact.bind({contact: {name:appstore.currentPage.contactName}});
+                currentHeader = undefined;
+                currentFooter = undefined;
+                break;
+            case "contactsScreen":
+                console.log('ContactsScreen');
+                currentComponent = Contacts;
+                currentHeader = undefined;
+                currentFooter = undefined;
+                break;
             case "settingsScreen":
                 console.log('SettingsScreen');
                 currentComponent = Settings;
@@ -116,6 +131,12 @@
         if(e.type === 'click'){
             console.log('onComponentClick', e);
             switch (e.detail) {
+                case "CONTACTS_SCREEN":
+                    currentComponent = Contacts;
+                    break;
+                case "CONTACT_SCREEN":
+                    currentComponent = Contact;
+                    break;
                 case "SETTINGS_SCREEN":
                     currentComponent = Settings;
                     break;

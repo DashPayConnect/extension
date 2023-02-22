@@ -56,12 +56,17 @@
     function onAccountsClick(){
         onOpenAccountClick();
     };
+    function onContactsClick(){
+        dispatch('click', 'CONTACTS_SCREEN');
+        AppStore.changePage({name: 'contactsScreen'});
+    };
     // }
 </script>
 <div class="ellipsis-menu-background" on:click={closeEllipsisMenu}></div>
 
 <nav class="ellipsis-menu">
     <button on:click={onAccountsClick}>Accounts</button>
+    <button on:click={onContactsClick}>Contacts</button>
     <button on:click={onSettingsClick}>Settings</button>
     <button on:click={onSecurityClick}>Security</button>
     <span style="color:black">Version: 1.0.0</span>

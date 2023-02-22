@@ -1,7 +1,8 @@
 import {writable, derived, get} from 'svelte/store';
 
 
-const defaultAppStore = {
+export const defaultAppStore = {
+    version: '1.0.0',
     'currentPage': {
         'name': '',
         'data': {}
@@ -10,6 +11,7 @@ const defaultAppStore = {
     logs: {
         firstRun: null,
     },
+    contacts: {},
     currentAccount: 0,
     currentWallet: '',
     wallets: {},
@@ -163,6 +165,20 @@ const createAppStore = () => {
                 return appStore;
             })
         },
+        importContact: (contactInfoObj) => {
+            console.log('AppStore importContact...');
+            AppStore.update(appStore => {
+                appStore.contacts[contactInfoObj.name] = contactInfoObj;
+                return appStore;
+            });
+        },
+        updateContact: (contactInfoObj) => {
+                console.log('AppStore updateContact...');
+                AppStore.update(appStore => {
+                appStore.contacts[contactInfoObj.name] = contactInfoObj;
+                return appStore;
+                });
+            },
         setLastBackupDate: () => {
             // SettingsStore.update(settingsStore => {
             //     settingsStore.lastBackupDate = new Date().toLocaleString()
@@ -277,6 +293,12 @@ export const AccountStore = derived(
         return $AppStore.accounts
     }
 );
+
+export const ContactsStore = derived(
+    AppStore,
+    $AppStore => {
+        return $AppStore.contacts
+    });
 
 export const SettingsStore = derived(
     AppStore,

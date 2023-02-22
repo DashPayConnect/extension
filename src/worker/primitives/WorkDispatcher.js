@@ -80,8 +80,7 @@ class WorkDispatcher {
 
     async update(request) {
         console.log('[WorkDispatcher] Update request', request);
-        const updateType = request.args[0];
-        const [,walletId, accountIndex, network, offlineMode] = request.args;
+        const [updateType,walletId, accountIndex, network, offlineMode] = request.args;
         console.log(request.args);
         switch (updateType) {
             case "NETWORK":
@@ -91,6 +90,7 @@ class WorkDispatcher {
             case "OFFLINE_MODE":
                 await this.dashManager.changeAccountInstanceNetwork(walletId, accountIndex, network, offlineMode);
                 request.args.push(offlineMode);
+                break;
             default:
                 console.error(`Unexpected update work requested`, JSON.stringify(request));
         }
@@ -102,6 +102,11 @@ class WorkDispatcher {
         switch (executeType) {
             case "TRANSACTION":
                 const [,address, amount ]= request.args;
+                console.log('TRANSACTION', address, amount);
+                console.log(this.storage)
+                // console.log(this.dashManager.instances)
+                // app State will have info of currentWallet
+                console.log(await this.storage.getAppState())
                 const instance = await this.dashManager.getInstance(this.storage.object.currentWallet);
                 try {
                     const tx = instance.currentAccount.createTransaction({recipient: address, amount});

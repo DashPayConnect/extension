@@ -1,0 +1,19 @@
+@import '../../common.scss';
+
+.contact-name-container {
+  height: 50px;
+  padding: 10px;
+  padding-top: 25px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+.delete-address-span{
+  cursor: pointer;
+  font-size: 8px;
+  padding-bottom: 2px;
+  color: red;
+}
+delete-address-span:hover{
+  color: #ab0101;
+}

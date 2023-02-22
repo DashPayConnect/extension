@@ -9,25 +9,30 @@ class DashManager {
     }
     async init(){
         console.log(`[DashManager] Initializing...`)
-        const {app:{currentAccount, currentWallet, wallets}} = await this.storage.getAppState();
-        console.log(await this.storage.getAppState());
-        console.log('currentAccount', currentAccount);
-        console.log('currentWallet', currentWallet);
-        console.log('wallets', wallets);
-
-        if(wallets && wallets[currentWallet]){
-            const wallet = wallets[currentWallet];
-            if(wallet.type !== 'mnemonic'){
-                console.log(`[DashManager] Wallet type ${wallet.type} not supported. Won't create instance`);
-                return;
+        const appState = await this.storage.getAppState();
+        console.log({appState});
+        if(appState.currentAccount){
+            const {app:{currentAccount, currentWallet, wallets}} = appState;
+            console.log('currentAccount', currentAccount);
+            console.log('currentWallet', currentWallet);
+            console.log('wallets', wallets);
+            if(wallets && wallets[currentWallet]){
+                const wallet = wallets[currentWallet];
+                if(wallet.type !== 'mnemonic'){
+                    console.log(`[DashManager] Wallet type ${wallet.type} not supported. Won't create instance`);
+                    return;
+                }
+                const mnemonic = wallet.value;
+                await this.createInstance({mnemonic, index: currentAccount});
+            } else {
+                console.log(`[DashManager] No wallet found. Won't create instance`);
+                console.log(this.storage)
+                console.log(await this.storage.getAppState())
             }
-            const mnemonic = wallet.value;
-            await this.createInstance({mnemonic, index: currentAccount});
         } else {
-            console.log(`[DashManager] No wallet found. Won't create instance`);
-            console.log(this.storage)
-            console.log(await this.storage.getAppState())
+            console.log(`[DashManager] No app state found. Won't create instance`);
         }
+
     }
     getInstance(walletId){
         console.log('[DashManager] Get instance...');
@@ -53,26 +58,31 @@ class DashManager {
                 appState.currentAccount = accountIndex;
                 appState.currentWallet = walletId;
                 await storage.setAppState(appState);
+                console.log({instance})
                 return instance;
             });
     }
-    async changeAccountInstanceNetwork(walletId, accountIndex, network, offlineMode = true){
+    async changeAccountInstanceNetwork(walletId, accountIndex, network, offlineMode){
         console.log('[DashManager] Set network...');
         console.log(walletId, accountIndex, network);
         console.log(this.instances);
         let instance = this.getInstance(walletId)
+        if(instance && offlineMode === undefined){
+            offlineMode = instance.client.wallet.offlineMode;
+        }
         if(!instance){
             console.log(`Current request instance ${walletId} not found. Default on first existing....`)
             instance = Object.entries(this.instances)[0][1];
-            walletId = instance.walletId;
+            walletId = instance.client.wallet.walletId;
+            if(offlineMode === undefined){
+                offlineMode = true
+            }
         }
-
-        console.log({instance})
         const walletOpts = {
             mnemonic: instance.client.wallet.mnemonic,
             index: instance.currentAccount.index,
             network: network ?? instance.client.network,
-            offlineMode: offlineMode ?? instance.client.wallet.offlineMode,
+            offlineMode: offlineMode,
         }
         const clientOpts = {
             network: walletOpts.network,
@@ -85,7 +95,7 @@ class DashManager {
         console.log('[DashManager] Create instance...');
         console.log({walletOpts, clientOpts});
         const instance = {
-            client: new Dash.Client({wallet: {offlineMode: true,...walletOpts},...clientOpts}),
+            client: new Dash.Client({wallet: {...walletOpts},...clientOpts}),
             currentAccount: null,
         };
         const walletId = instance.client.wallet.walletId;

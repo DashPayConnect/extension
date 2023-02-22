@@ -1,0 +1,30 @@
+@import '../../common.scss';
+
+.contact {
+
+}
+
+
+.contact-item {
+  height: 80px;
+  background-color: #b2d7f3;
+  color: black;
+  width: 400px;
+  text-align: center;
+  display: flex;
+  border-bottom: 1px solid black;
+}
+.contact-item__name {
+  width: 60px;
+  margin: auto;
+  text-align: end;
+}
+.contact-item__description {
+    width: 225px;
+    margin: auto;
+    text-align: start;
+}
+.contact h3 {
+    color: black;
+    font-weight: bold;
+}
