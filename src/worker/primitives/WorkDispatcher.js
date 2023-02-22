@@ -42,19 +42,27 @@ class WorkDispatcher {
         const fetchType = request.args[0];
         console.log({fetchType});
         const entries = Object.entries(this.dashManager.instances);
+        const account = this.dashManager.getInstance(entries[0][0]).currentAccount;
+        console.log(account);
         switch (fetchType) {
             case 'ACCOUNT':
-                console.log('dashmanagerstate',this.dashManager)
                 if(entries.length){
-                    const account = this.dashManager.getInstance(entries[0][0]).currentAccount;
-                    console.log(account);
                     const { accountPath, walletId, walletType, index: accountIndex } = account;
                     const accountObj = { accountIndex, accountPath, walletId, walletType, address: account.getAddress(0) };
                     request.args.push(accountObj);
                     request.args.push(await account.getConfirmedBalance());
+                    request.args.push(await account.getTransactionHistory());
                 }
                 break;
             case 'ADDRESS':
+                const { accountPath, walletId, walletType, index: accountIndex } = account;
+                request.args.push(await account.getAddress());
+                break
+            case 'BALANCE':
+                request.args.push(await account.getConfirmedBalance());
+                break;
+            case 'TRANSACTION_HISTORY':
+                request.args.push(await account.getTransactionHistory());
                 break;
             default:
                 console.error(`Unexpected fetch work requested`, fetchType, JSON.stringify(request));
